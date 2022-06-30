@@ -72,7 +72,7 @@
 
                         $servername = "mad.dek.cz";
                         $username = "mad";
-                        $password = "Hpv9qUprkPqa";
+                        $password = "";
 
                         // Create connection
                         $conn = new mysqli($servername, $username, $password);

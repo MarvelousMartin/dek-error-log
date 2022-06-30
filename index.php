@@ -39,11 +39,17 @@
         <div class="row">
             <div>
                 <h1 style="display: inline-block">Log</h1>
-                <a id="dropdownMenuLink" class="btn align-self-center" href="#" role="button" style="float: right">
+                <a id="dropdownMenuLink" class="btn align-self-center" href="#" style="float: right" onclick="toggle('el')">
                     <svg style="float: right" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="lightgrey" class="bi bi-funnel-fill" viewBox="0 0 16 16">
                         <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
                     </svg>
                 </a>
+                <div id="el">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#">Lorem</a>
+                        <a class="dropdown-item" href="#">Ipsum</a>
+                    </div>
+                </div>
             </div>
         </div>
         <hr class="hr">
@@ -56,9 +62,9 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Datum</th>
+                            <th style="padding: 8px 20px">Datum</th>
                             <th style="padding: 8px 20px">Kód</th>
-                            <th>Popis chyby</th>
+                            <th style="padding: 8px 20px">Popis chyby</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -66,7 +72,7 @@
 
                         $servername = "mad.dek.cz";
                         $username = "mad";
-                        $password = $_ENV['PASSWORD'];
+                        $password = "";
 
                         // Create connection
                         $conn = new mysqli($servername, $username, $password);
@@ -75,22 +81,23 @@
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
-                        $sql = "SELECT * FROM madtest.`error-log`";
+                        $sql = "SELECT * FROM madtest.`error-log` ORDER BY date desc, id desc";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
                             $counter = 1;
+                            echo "Nalezeno " . $result->num_rows . " záznamů";
                             while($row = $result->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . $row["id"] . "</td>";
-                                echo "<td>" . $row["date"] . "</td>";
+                                echo '<td>' . $row["id"] . "</td>";
+                                echo '<td style="padding: 8px 20px">' . $row["date"] . "</td>";
                                 echo '<td style="padding: 8px 20px">' . $row["code"] . "</td>";
-                                echo "<td>" . $row["description"] .'<button id="'.$counter.'" type="button" class="btn btn-error">Přiřadit se na úkol</button>'."</td>";
+                                echo '<td style="padding: 8px 20px">' . $row["description"] .'<button id="'.$counter.'" class="btn btn-error">Přiřadit se na úkol</button>'."</td>";
                                 echo "</tr>";
                                 $counter++;
                             }
                         } else {
-                            echo "0 results";
+                            echo "0 záznamů v databázi";
                         }
                         ?>
                         </tbody>

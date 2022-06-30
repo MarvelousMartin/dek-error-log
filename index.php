@@ -71,8 +71,8 @@
                         <?php
 
                         $servername = "mad.dek.cz";
-                        $username = "mad";
-                        $password = "";
+                        $username = $_ENV['username'];
+                        $password = $_ENV['PASSWORD'];
 
                         // Create connection
                         $conn = new mysqli($servername, $username, $password);

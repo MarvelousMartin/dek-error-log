@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    <img src="https://yt3.ggpht.com/ytc/AKedOLTi3Tksal7704hklzlyR8Sd0oPV1sy8WLM3HqHEAw=s900-c-k-c0x00ffffff-no-rj" alt="logo">
+                    <img src="assets/images/dek.jpg" alt="logo">
                     &nbsp;&nbsp;Error logger
                 </a>
             </div>
@@ -55,34 +55,42 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Error</th>
-                            <th>Description</th>
+                            <th>ID</th>
+                            <th>Datum</th>
+                            <th style="padding: 8px 20px">Kód</th>
+                            <th>Popis chyby</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
-                        $i = 1;
-                        function getErrors(): array
-                        {
-                            $errors = array();
-                            $errors[] = array(
-                                'date' => date('d.m.Y'),
-                                'error' => '404',
-                                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                            );
-                            return $errors;
+
+                        $servername = "mad.dek.cz";
+                        $username = "mad";
+                        $password = $_ENV['PASSWORD'];
+
+                        // Create connection
+                        $conn = new mysqli($servername, $username, $password);
+
+                        // Check connection
+                        if ($conn->connect_error) {
+                            die("Connection failed: " . $conn->connect_error);
                         }
-                        $errors = getErrors();
-                        foreach ($errors as $error) {
-                            echo '<tr>';
-                            echo '<td>' . $i . '</td>';
-                            echo '<td>' . $error['date'] . '</td>';
-                            echo '<td>' . $error['error'] . '</td>';
-                            echo '<td>' . $error['description'] . '</td>';
-                            echo '</tr>';
-                            $i++;
+                        $sql = "SELECT * FROM madtest.`error-log`";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            $counter = 1;
+                            while($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row["id"] . "</td>";
+                                echo "<td>" . $row["date"] . "</td>";
+                                echo '<td style="padding: 8px 20px">' . $row["code"] . "</td>";
+                                echo "<td>" . $row["description"] .'<button id="'.$counter.'" type="button" class="btn btn-error">Přiřadit se na úkol</button>'."</td>";
+                                echo "</tr>";
+                                $counter++;
+                            }
+                        } else {
+                            echo "0 results";
                         }
                         ?>
                         </tbody>
@@ -94,5 +102,6 @@
 </body>
 
 <script src="js/bootstrap.js"></script>
+<script src="js/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 </html>

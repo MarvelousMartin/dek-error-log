@@ -35,6 +35,10 @@ html,body {
     height: 50px;
 }
 
+.navbar-brand:hover {
+    color: red;
+}
+
 #error-list {
     padding-top: 30px;
 }
